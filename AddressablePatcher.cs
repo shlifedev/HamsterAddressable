@@ -33,23 +33,7 @@ namespace Hamster.Addressable
         }
         private static AddressablePatcher inst; 
         private void Awake()
-        {
-            StartPatch(
-                (x,x2) =>
-                {
-                    if (x)
-                    {
-                        
-                    }
-                    else
-                    {
-                        
-                    }
-                }, 
-                () => { },  
-                (x) => { },
-                () => { }, 
-                () => { });
+        { 
         } 
         /// <summary>
         /// 각 콜백에 UI 구현을 연동
@@ -60,7 +44,15 @@ namespace Hamster.Addressable
             StartCoroutine(EStartPatch(onRequireDownload, onFailedDownloadSizeCheck, onUpdateDownloaded, onCompleteDownload, onFailedDownload));
         }
 
-        
+        public void AcceptDownload()
+        {
+            this.waitUntilAcceeptPatch = EPatchAccept.Accept;
+        }
+        public void RefuseDownload()
+        {
+            this.waitUntilAcceeptPatch = EPatchAccept.Refuse;
+        }
+
         /// <summary>
         /// 쉬운 코드 플로우로 구현하기 위해 해당 코루틴 함수 안에서 패치 과정이 이루어 집니다.
         /// 패치 시스템 구현자는 해당 코루틴 함수구문만 분석 한뒤 각 콜백에 UI 변경 사항등을 구현하시면 됩니다.
@@ -116,7 +108,7 @@ namespace Hamster.Addressable
 
                     if (waitUntilAcceeptPatch == EPatchAccept.Refuse)
                     {
-                        
+                        Debug.Log("[AddressablePatcher] => Patch Refuse by Player(User).");
                     }
                 } 
                 //다운로드 할 필요가 없음 
